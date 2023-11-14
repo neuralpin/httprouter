@@ -10,11 +10,8 @@ Example for basic usage
 ```php
 use Neuralpin\HTTPRouter\Router;
 use Controllers\UserController;
-use Controllers\DefaultController;
 
-$DefaultController = new DefaultController();
-
-Router::get( '/', function(){
+Router::any( '/', function(){
     echo "Hello world";
     return true;
 } );
@@ -26,7 +23,7 @@ Router::get( 'user/:id', UserController::class, 'get' );
 Router::patch( 'user/:id', UserController::class, 'patch' );
 Router::delete( 'user/:id', UserController::class, 'delete' );
 
-if ( !Router::match() ) {
+if ( !Router::match($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']) ) {
     header('HTTP/1.0 404 Not Found');
     require __DIR__.'/404.html';
 }

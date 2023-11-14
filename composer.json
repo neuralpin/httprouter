@@ -1,0 +1,20 @@
+{
+    "name": "neuralpin/httprouter",
+    "type": "library",
+    "description": "Helper for http routing process",
+    "keywords": ["helper"],
+    "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ulises Rendón",
+            "email": "fdulises@outlook.com",
+            "homepage": "https://neuralpin.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Neuralpin\\HTTPRouter\\": "src/"
+        }
+    }
+}

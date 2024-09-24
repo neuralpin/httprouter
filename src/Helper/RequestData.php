@@ -37,7 +37,7 @@ class RequestData implements RequestState
         return $this->body;
     }
 
-    public function getInput(string $name)
+    public function getInput(string $name): mixed
     {
         return $this->body[$name] ?? null;
     }
@@ -45,6 +45,11 @@ class RequestData implements RequestState
     public function getQueryParams(): array
     {
         return $this->queryParams;
+    }
+
+    public function getParam(string $name): mixed
+    {
+        return $this->queryParams[$name] ?? null;
     }
 
     public function getMethod(): string

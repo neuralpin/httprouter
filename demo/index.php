@@ -1,13 +1,5 @@
-# neuralpin/httprouter
+<?php
 
-## Description:
-Helper for http request processing
-[Github Repo](https://github.com/neuralpin/httprouter)
-
-## How to use
-
-Example usage
-```php
 use Neuralpin\HTTPRouter\{
     Router,
     Response,
@@ -18,7 +10,7 @@ use Neuralpin\HTTPRouter\{
     Demo\DemoController,
 };
 
-RouteCollection::any('/', fn () => 'Hello world!');
+RouteCollection::any('/', fn() => 'Hello world!');
 RouteCollection::any('/home', fn() => Response::template('template/home.html'));
 RouteCollection::get('/api/v1/product', [DemoController::class, 'list']);
 RouteCollection::post('/api/v1/product', [DemoController::class, 'create']);
@@ -48,12 +40,12 @@ try {
 } catch (\Exception $Exception) {
     if ($Exception instanceof NotFoundException) {
         $Controller = new ControllerWrapped(
-            fn () => Response::template('template/404.html', 404),
+            fn() => Response::template('template/404.html', 404),
             $RequestState,
         );
     } elseif ($Exception instanceof MethodNotAllowedException) {
         $Controller = new ControllerWrapped(
-            fn () => Response::template('template/405.html', 405),
+            fn() => Response::template('template/405.html', 405),
             $RequestState,
         );
     } else {
@@ -65,9 +57,3 @@ try {
 }
 
 echo $Controller->getResponse();
-```
-## Use the module with composer
-```bash
-composer config repositories.neuralpin/HTTPRouter vcs https://github.com/neuralpin/httprouter
-composer require neuralpin/HTTPRouter
-```

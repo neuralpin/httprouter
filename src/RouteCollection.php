@@ -2,8 +2,11 @@
 
 namespace Neuralpin\HTTPRouter;
 
-use Neuralpin\HTTPRouter\Interface\ControllerMapper;
+use Stringable;
+use Neuralpin\HTTPRouter\Route;
 use Neuralpin\HTTPRouter\Interface\RouteMapper;
+use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Neuralpin\HTTPRouter\Interface\ControllerMapper;
 
 class RouteCollection implements RouteMapper
 {
@@ -13,11 +16,18 @@ class RouteCollection implements RouteMapper
     }
 
     /**
-     * @var ControllerMapper[]
+     * @var array<string, ControllerMapper>
      */
     public static array $routes = [];
 
-    public static function addRoute(string $method, string $path, object|array $callable): Route
+    /**
+     * Add new route to the collection
+     * @param string $method
+     * @param string $path
+     * @param callable(mixed ...): (ResponseState|Stringable|string|scalar|null)
+     * @return Route
+     */
+    public static function addRoute(string $method, string $path, object|array $callable): ControllerMapper
     {
         self::$routes[$path] ??= new Route(trim($path, '/'));
         self::$routes[$path]->addController($method, $callable);

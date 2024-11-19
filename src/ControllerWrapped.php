@@ -3,6 +3,7 @@
 namespace Neuralpin\HTTPRouter;
 
 use DomainException;
+use Stringable;
 use Neuralpin\HTTPRouter\Exception\InvalidControllerException;
 use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
 use Neuralpin\HTTPRouter\Interface\RequestState;
@@ -45,7 +46,7 @@ class ControllerWrapped implements ControllerWrapper
         $this->Controller = $Controller;
     }
 
-    public function getResponse(): ?ResponseState
+    public function getResponse(): null|ResponseState|Stringable
     {
         ob_start();
         $Result = call_user_func_array($this->Controller, $this->params);

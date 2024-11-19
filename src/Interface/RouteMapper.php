@@ -5,7 +5,7 @@ namespace Neuralpin\HTTPRouter\Interface;
 interface RouteMapper
 {
     /**
-     * @return ControllerMapper[]
+     * @return array<string, ControllerMapper>
      */
     public function getRoutes(): array;
 }

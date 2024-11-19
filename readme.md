@@ -6,27 +6,65 @@ Helper for http request processing
 
 ## How to use
 
-Example for basic usage
+Example usage
 ```php
-use Neuralpin\HTTPRouter\Router;
-use Controllers\UserController;
+use Neuralpin\HTTPRouter\{
+    Router,
+    Response,
+    ControllerWrapped,
+    RouteCollection,
+    Exception\NotFoundException,
+    Helper\RequestData,
+    Helper\DemoController,
+};
 
-Router::any( '/', function(){
-    echo "Hello world";
-    return true;
-} );
-Router::get( 'user/login', UserController::class, 'loginForm' );
-Router::post( 'user/login', UserController::class, 'loginUser' );
-Router::get( 'user/register', UserController::class, 'registerForm' );
-Router::post( 'user/register', UserController::class, 'post' );
-Router::get( 'user/:id', UserController::class, 'get' );
-Router::patch( 'user/:id', UserController::class, 'patch' );
-Router::delete( 'user/:id', UserController::class, 'delete' );
+RouteCollection::any('/', fn () => 'Hello world!');
+RouteCollection::any('/home', fn() => Response::template('template/home.html'));
+RouteCollection::get('/api/v1/product', [DemoController::class, 'list']);
+RouteCollection::post('/api/v1/product', [DemoController::class, 'create']);
+RouteCollection::get('/api/v1/product/:id', [DemoController::class, 'get']);
+RouteCollection::patch('/api/v1/product/:id', [DemoController::class, 'update']);
+RouteCollection::delete('/api/v1/product/:id', [DemoController::class, 'delete']);
 
-if ( !Router::match($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']) ) {
-    header('HTTP/1.0 404 Not Found');
-    require __DIR__.'/404.html';
+RouteCollection::get('/api/v1/search/:search', function ($search) {
+    $search = explode('/', htmlspecialchars($search));
+    $search = implode(' ', $search);
+    return "Searching: $search";
+})->ignoreParamSlash();
+
+
+$Router = new Router;
+$RouteCollection = new RouteCollection;
+$RequestState = RequestData::createFromGlobals();
+
+try {
+
+    $Controller = $Router->getController($RouteCollection, $RequestState);
+
+    if (is_null($Controller)) {
+        throw new NotFoundException; // Throws 404 error when route doesn't exists
+    }
+
+} catch (\Exception $Exception) {
+    if ($Exception instanceof NotFoundException) {
+        $Controller = new ControllerWrapped(
+            fn () => Response::template('template/404.html', 404),
+            $RequestState,
+        );
+    } elseif ($Exception instanceof MethodNotAllowedException) {
+        $Controller = new ControllerWrapped(
+            fn () => Response::template('template/405.html', 405),
+            $RequestState,
+        );
+    } else {
+        $Controller = new ControllerWrapped(
+            fn() => Response::template('template/500.html', 500),
+            $RequestState,
+        );
+    }
 }
+
+return $Controller;
 ```
 ## Use the module with composer
 ```bash

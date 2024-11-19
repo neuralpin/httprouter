@@ -2,15 +2,15 @@
 
 namespace Neuralpin\HTTPRouter;
 
-use Neuralpin\HTTPRouter\Interface\ControllerMaper;
+use Neuralpin\HTTPRouter\Interface\ControllerMapper;
 use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
 use Neuralpin\HTTPRouter\Interface\RequestState;
 
-class Route implements ControllerMaper
+class Route implements ControllerMapper
 {
     protected string $basePath;
 
-    protected string $patern;
+    protected string $pattern;
 
     protected array $methods = [];
 
@@ -20,8 +20,8 @@ class Route implements ControllerMaper
         null|object|array $controller = null,
     ) {
         $this->basePath = $basePath;
-        $this->patern = preg_replace('/:([a-zA-Z0-9]+)/', '([^/]+)', $this->basePath);
-        $this->patern = '/^'.str_replace('/', '\/', $this->patern).'$/';
+        $this->pattern = preg_replace('/:([a-zA-Z0-9]+)/', '([^/]+)', $this->basePath);
+        $this->pattern = '/^'.str_replace('/', '\/', $this->pattern).'$/';
 
         if (isset($method, $controller)) {
             $this->addController($method, $controller);
@@ -42,7 +42,7 @@ class Route implements ControllerMaper
 
     public function pathMatches(string $path): bool
     {
-        return preg_match($this->patern, $path);
+        return preg_match($this->pattern, $path);
     }
 
     public function methodMatches(string $method): bool
@@ -52,8 +52,8 @@ class Route implements ControllerMaper
 
     public function ignoreParamSlash(): static
     {
-        $patern = preg_replace('/:(.*)/', '(.*)', $this->basePath);
-        $this->patern = '/^'.str_replace('/', '\/', $patern).'$/';
+        $pattern = preg_replace('/:(.*)/', '(.*)', $this->basePath);
+        $this->pattern = '/^'.str_replace('/', '\/', $pattern).'$/';
 
         return $this;
     }
@@ -72,7 +72,7 @@ class Route implements ControllerMaper
         preg_match_all('/:([a-zA-Z0-9]+)/', $this->basePath, $paramNames, PREG_SET_ORDER);
         $paramNames = array_column($paramNames, 1);
 
-        preg_match($this->patern, $path, $uriParams);
+        preg_match($this->pattern, $path, $uriParams);
         array_shift($uriParams);
 
         return array_combine($paramNames, $uriParams);

@@ -2,10 +2,10 @@
 
 namespace Neuralpin\HTTPRouter;
 
-use Neuralpin\HTTPRouter\Interface\ControllerMaper;
-use Neuralpin\HTTPRouter\Interface\RouteMaper;
+use Neuralpin\HTTPRouter\Interface\ControllerMapper;
+use Neuralpin\HTTPRouter\Interface\RouteMapper;
 
-class RouteCollection implements RouteMaper
+class RouteCollection implements RouteMapper
 {
     public function getRoutes(): array
     {
@@ -13,7 +13,7 @@ class RouteCollection implements RouteMaper
     }
 
     /**
-     * @var ControllerMaper[]
+     * @var ControllerMapper[]
      */
     public static array $routes = [];
 

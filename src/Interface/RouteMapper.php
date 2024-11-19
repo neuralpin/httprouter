@@ -2,10 +2,10 @@
 
 namespace Neuralpin\HTTPRouter\Interface;
 
-interface RouteMaper
+interface RouteMapper
 {
     /**
-     * @return ControllerMaper[]
+     * @return ControllerMapper[]
      */
     public function getRoutes(): array;
 }

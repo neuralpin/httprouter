@@ -9,7 +9,7 @@ use Stringable;
 
 class RouteCollection implements RouteMapper
 {
-    protected readonly string $ControllerMapper;
+    public readonly string $ControllerMapper;
 
 
     public function setControllerMapper(string $ControllerMapper): void

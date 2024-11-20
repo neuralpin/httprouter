@@ -17,15 +17,15 @@ use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;
 
 class Router implements RouteMatcher
 {
-    protected RouteMapper $RouteCollection;
+    public readonly RouteMapper $RouteCollection;
     
     /**
      * Summary of ControllerWrapper
      * @var class-string<ControllerWrapper> $ControllerWrapper
      */
-    protected string $ControllerWrapper;
+    public readonly string $ControllerWrapper;
 
-    protected RequestState $RequestState;
+    public readonly RequestState $RequestState;
 
     /**
      * Summary of __construct

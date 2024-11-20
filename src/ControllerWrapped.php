@@ -14,40 +14,11 @@ use Stringable;
 class ControllerWrapped implements ControllerWrapper
 {
     protected null|array|object $Controller;
-
     protected string $method;
-
     protected string $path;
-
-    protected array $params;
-
     protected array $queryParams;
-
+    protected array $routeParameters = [];
     protected RequestState $RequestState;
-    protected array $RouteParams = [];
-
-    // public function __construct(
-    //     null|array|object $Controller,
-    //     RequestState $RequestState,
-    //     array $RouteParams = [],
-    // ) {
-    //     if (
-    //         is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
-    //         || is_object($Controller) && ! is_callable($Controller)
-    //     ) {
-    //         throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
-    //     }
-
-    //     if (is_array($Controller)) {
-    //         $Controller = [new $Controller[0], $Controller[1]];
-    //     }
-
-    //     $this->method = $RequestState->getMethod();
-    //     $this->path = $RequestState->getPath();
-    //     $this->queryParams = $RequestState->getQueryParams();
-    //     $this->params = $this->resolveParams($Controller, $RequestState, $RouteParams);
-    //     $this->Controller = $Controller;
-    // }
 
     public function setController(
         null|array|object $Controller
@@ -72,32 +43,33 @@ class ControllerWrapped implements ControllerWrapper
     ): void
     {
         $this->RequestState = $RequestState;
+
+        $this->method = $this->RequestState->getMethod();
+        $this->path = $this->RequestState->getPath();
+        $this->queryParams = $this->RequestState->getQueryParams();
     }
 
     public function setParams(
-        array $RouteParams = [],
+        array $routeParameters = [],
     ): void 
     {
-        $this->RouteParams = $RouteParams;
+        $this->routeParameters = $routeParameters;
     }
 
     public function getResponse(): null|ResponseState|Stringable
     {
-        $this->method = $this->RequestState->getMethod();
-        $this->path = $this->RequestState->getPath();
-        $this->queryParams = $this->RequestState->getQueryParams();
 
-        $this->params = $this->resolveParams($this->Controller, $this->RequestState, $this->RouteParams);
+        $params = $this->resolveParams($this->Controller, $this->RequestState, $this->routeParameters);
 
         ob_start();
-        $Result = call_user_func_array($this->Controller, $this->params);
+        $Result = call_user_func_array($this->Controller, $params);
         ob_clean();
 
         $ResultType = gettype($Result);
 
         if ($ResultType === 'object' && $Result instanceof ResponseState) {
             $Result->setQueryParams($this->queryParams);
-            $Result->setParams($this->params);
+            $Result->setParams($params);
             $Result->setMethod($this->method);
             $Result->setPath($this->path);
 

@@ -1,12 +1,34 @@
 <?php
 
 require __DIR__.'/../vendor/autoload.php';
-require __DIR__.'/config/routes.php';
 
+use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\Demo\DemoController;
+
+$Router = new Router();
+
+$Router->any('/', fn() => 'Hello world!');
+$Router->any('/home', fn() => Response::template(__DIR__ . '/template/home.html'));
+$Router->get('/api/v1/product', [DemoController::class, 'list']);
+$Router->post('/api/v1/product', [DemoController::class, 'create']);
+$Router->get('/api/v1/product/:id', [DemoController::class, 'get']);
+$Router->patch('/api/v1/product/:id', [DemoController::class, 'update']);
+$Router->delete('/api/v1/product/:id', [DemoController::class, 'delete']);
+$Router
+    ->get('/api/v1/search/:search', function ($search) {
+        $search = explode('/', htmlspecialchars($search));
+        $search = implode(' ', $search);
+
+        return "Searching: $search";
+    })
+    ->ignoreParamSlash();
 
 try {
 
+    /**
+     * @var Router $Router
+     */
     $Controller = $Router->getController();
 
 } catch (\Throwable| \Exception $Exception) {
@@ -25,4 +47,5 @@ try {
     }
 }
 
+// dd($Router, $Router->getController(), $Router->getController()->getResponse(), $Router->getController()->getResponse()->getBody());
 echo $Controller->getResponse();

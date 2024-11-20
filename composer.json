@@ -16,5 +16,8 @@
         "psr-4": {
             "Neuralpin\\HTTPRouter\\": "src/"
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^7.1"
     }
 }

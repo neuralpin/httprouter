@@ -3,6 +3,7 @@
 namespace Neuralpin\HTTPRouter\Helper;
 
 use Neuralpin\HTTPRouter\Interface\RequestState;
+use Neuralpin\HTTPRouter\Helper\RequestDataHelper;
 
 class RequestData implements RequestState
 {
@@ -14,17 +15,6 @@ class RequestData implements RequestState
         protected array $queryParams = [],
     ) {
         $this->method = strtolower($this->method);
-    }
-
-    public static function createFromGlobals(): RequestState
-    {
-        return new self(
-            headers: getallheaders(),
-            body: json_decode(file_get_contents('php://input'), true),
-            queryParams: (new RequestParamHelper($_SERVER['QUERY_STRING'] ?? ''))->Params,
-            method: $_SERVER['REQUEST_METHOD'],
-            path: strtok(trim($_SERVER['REQUEST_URI'], '/') ?? '/', '?'),
-        );
     }
 
     public function getHeaders(): array
@@ -61,4 +51,22 @@ class RequestData implements RequestState
     {
         return $this->path;
     }
+
+    public static function createFromGlobals(?string $bodyRequestString = null): RequestState
+    {
+
+        $queryString = $_SERVER['QUERY_STRING'] ?? '';
+
+        $RequestDataHelper = new RequestDataHelper;
+        $bodyRequestString ??= $RequestDataHelper->getBodyString();
+
+        return new self(
+            headers: $RequestDataHelper->getAllHeaders(),
+            body: json_decode($bodyRequestString, true),
+            queryParams: $RequestDataHelper->getQueryParams($queryString),
+            method: $_SERVER['REQUEST_METHOD'],
+            path: strtok(trim($_SERVER['REQUEST_URI'], '/') ?? '/', '?'),
+        );
+    }
+
 }

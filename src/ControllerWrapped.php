@@ -3,13 +3,13 @@
 namespace Neuralpin\HTTPRouter;
 
 use DomainException;
-use Stringable;
 use Neuralpin\HTTPRouter\Exception\InvalidControllerException;
 use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
 use Neuralpin\HTTPRouter\Interface\RequestState;
 use Neuralpin\HTTPRouter\Interface\ResponseState;
 use ReflectionFunction;
 use ReflectionMethod;
+use Stringable;
 
 class ControllerWrapped implements ControllerWrapper
 {
@@ -23,11 +23,36 @@ class ControllerWrapped implements ControllerWrapper
 
     protected array $queryParams;
 
-    public function __construct(
-        null|array|object $Controller,
-        RequestState $RequestState,
-        array $RouteParams = [],
-    ) {
+    protected RequestState $RequestState;
+    protected array $RouteParams = [];
+
+    // public function __construct(
+    //     null|array|object $Controller,
+    //     RequestState $RequestState,
+    //     array $RouteParams = [],
+    // ) {
+    //     if (
+    //         is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
+    //         || is_object($Controller) && ! is_callable($Controller)
+    //     ) {
+    //         throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
+    //     }
+
+    //     if (is_array($Controller)) {
+    //         $Controller = [new $Controller[0], $Controller[1]];
+    //     }
+
+    //     $this->method = $RequestState->getMethod();
+    //     $this->path = $RequestState->getPath();
+    //     $this->queryParams = $RequestState->getQueryParams();
+    //     $this->params = $this->resolveParams($Controller, $RequestState, $RouteParams);
+    //     $this->Controller = $Controller;
+    // }
+
+    public function setController(
+        null|array|object $Controller
+    ): void
+    {
         if (
             is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
             || is_object($Controller) && ! is_callable($Controller)
@@ -39,15 +64,31 @@ class ControllerWrapped implements ControllerWrapper
             $Controller = [new $Controller[0], $Controller[1]];
         }
 
-        $this->method = $RequestState->getMethod();
-        $this->path = $RequestState->getPath();
-        $this->queryParams = $RequestState->getQueryParams();
-        $this->params = $this->resolveParams($Controller, $RequestState, $RouteParams);
         $this->Controller = $Controller;
+    }
+
+    public function setState(
+        RequestState $RequestState,
+    ): void
+    {
+        $this->RequestState = $RequestState;
+    }
+
+    public function setParams(
+        array $RouteParams = [],
+    ): void 
+    {
+        $this->RouteParams = $RouteParams;
     }
 
     public function getResponse(): null|ResponseState|Stringable
     {
+        $this->method = $this->RequestState->getMethod();
+        $this->path = $this->RequestState->getPath();
+        $this->queryParams = $this->RequestState->getQueryParams();
+
+        $this->params = $this->resolveParams($this->Controller, $this->RequestState, $this->RouteParams);
+
         ob_start();
         $Result = call_user_func_array($this->Controller, $this->params);
         ob_clean();

@@ -2,9 +2,9 @@
 
 namespace Neuralpin\HTTPRouter\Demo;
 
-use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\Helper\RequestData;
 use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Neuralpin\HTTPRouter\Response;
 
 class DemoController
 {
@@ -13,12 +13,16 @@ class DemoController
         return Response::template('template/home.html');
     }
 
-    public function getById(int $id): ResponseState
+    public function get(int $id): ResponseState
     {
 
         return Response::json([
             'id' => $id,
-            'data' => [],
+            'data' => [
+                'id' => $id,
+                'title' => 'Lorem ipsum',
+                'price' => 123,
+            ],
         ]);
 
     }
@@ -29,12 +33,12 @@ class DemoController
             [
                 'id' => 123,
                 'title' => 'Lorem ipsum',
-                'price' => 123
+                'price' => 123,
             ],
             [
                 'id' => 321,
                 'title' => 'Dolor sit',
-                'price' => 312.99
+                'price' => 312.99,
             ],
             [
                 'id' => 231,
@@ -77,14 +81,13 @@ class DemoController
         $title = $Request->getInput('title') ?? null;
         $price = $Request->getInput('price') ?? null;
 
-
         return Response::json([
             'status' => 'updated',
             'data' => [
                 'id' => $id,
                 'title' => $title,
                 'price' => $price,
-            ]
+            ],
         ], 200);
 
     }
@@ -95,7 +98,7 @@ class DemoController
             'status' => 'deleted',
             'data' => [
                 'id' => $id,
-            ]
+            ],
         ], 200);
     }
 }

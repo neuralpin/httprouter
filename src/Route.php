@@ -5,8 +5,9 @@ namespace Neuralpin\HTTPRouter;
 use Neuralpin\HTTPRouter\Interface\ControllerMapper;
 use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
 use Neuralpin\HTTPRouter\Interface\RequestState;
+use Neuralpin\HTTPRouter\Interface\RouteMapperExtended;
 
-class Route implements ControllerMapper
+class Route implements RouteMapperExtended
 {
     protected string $basePath;
 
@@ -50,7 +51,7 @@ class Route implements ControllerMapper
         return (isset($this->methods[$method]) || isset($this->methods['any'])) ? true : false;
     }
 
-    public function ignoreParamSlash(): static
+    public function ignoreParamSlash(): ControllerMapper
     {
         $pattern = preg_replace('/:(.*)/', '(.*)', $this->basePath);
         $this->pattern = '/^'.str_replace('/', '\/', $pattern).'$/';
@@ -64,7 +65,12 @@ class Route implements ControllerMapper
         $Controller = $this->methods[$RequestData->getMethod()] ?? $this->methods['any'] ?? null;
         $RouteParams = $this->bindParams($RequestData->getPath());
 
-        return new ControllerWrapped($Controller, $RequestData, $RouteParams);
+        $ControllerWrapped = new ControllerWrapped();
+        $ControllerWrapped->setController($Controller);
+        $ControllerWrapped->setState($RequestData);
+        $ControllerWrapped->setParams($RouteParams);
+
+        return $ControllerWrapped;
     }
 
     public function bindParams(string $path): array

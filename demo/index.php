@@ -1,57 +1,26 @@
 <?php
 
-use Neuralpin\HTTPRouter\{
-    Router,
-    Response,
-    ControllerWrapped,
-    RouteCollection,
-    Exception\NotFoundException,
-    Helper\RequestData,
-    Demo\DemoController,
-};
+require __DIR__.'/../vendor/autoload.php';
+require __DIR__.'/config/routes.php';
 
-RouteCollection::any('/', fn() => 'Hello world!');
-RouteCollection::any('/home', fn() => Response::template('template/home.html'));
-RouteCollection::get('/api/v1/product', [DemoController::class, 'list']);
-RouteCollection::post('/api/v1/product', [DemoController::class, 'create']);
-RouteCollection::get('/api/v1/product/:id', [DemoController::class, 'get']);
-RouteCollection::patch('/api/v1/product/:id', [DemoController::class, 'update']);
-RouteCollection::delete('/api/v1/product/:id', [DemoController::class, 'delete']);
-
-RouteCollection::get('/api/v1/search/:search', function ($search) {
-    $search = explode('/', htmlspecialchars($search));
-    $search = implode(' ', $search);
-    return "Searching: $search";
-})->ignoreParamSlash();
-
-
-$Router = new Router;
-$RouteCollection = new RouteCollection;
-$RequestState = RequestData::createFromGlobals();
+use Neuralpin\HTTPRouter\Response;
 
 try {
 
-    $Controller = $Router->getController($RouteCollection, $RequestState);
+    $Controller = $Router->getController();
 
-    if (is_null($Controller)) {
-        throw new NotFoundException; // Throws 404 error when route doesn't exists
-    }
-
-} catch (\Exception $Exception) {
-    if ($Exception instanceof NotFoundException) {
-        $Controller = new ControllerWrapped(
-            fn() => Response::template('template/404.html', 404),
-            $RequestState,
+} catch (\Throwable| \Exception $Exception) {
+    if ($Router->isNotFoundException($Exception)) {
+        $Controller = $Router->wrapController(
+            fn () => Response::template(__DIR__.'/template/404.html', 404)
         );
-    } elseif ($Exception instanceof MethodNotAllowedException) {
-        $Controller = new ControllerWrapped(
-            fn() => Response::template('template/405.html', 405),
-            $RequestState,
+    } elseif ($Router->isMethodNotAllowedException($Exception)) {
+        $Controller = $Router->wrapController(
+            fn () => Response::template(__DIR__.'/template/405.html', 405)
         );
     } else {
-        $Controller = new ControllerWrapped(
-            fn() => Response::template('template/500.html', 500),
-            $RequestState,
+        $Controller = $Router->wrapController(
+            fn () => Response::template(__DIR__.'/template/500.html', 500)
         );
     }
 }

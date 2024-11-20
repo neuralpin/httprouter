@@ -65,7 +65,7 @@ class Route implements RouteMapperExtended
         $Controller = $this->methods[$RequestData->getMethod()] ?? $this->methods['any'] ?? null;
         $RouteParams = $this->bindParams($RequestData->getPath());
 
-        $ControllerWrapped = new ControllerWrapped();
+        $ControllerWrapped = new ControllerWrapped;
         $ControllerWrapped->setController($Controller);
         $ControllerWrapped->setState($RequestData);
         $ControllerWrapped->setParams($RouteParams);

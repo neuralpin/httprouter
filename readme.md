@@ -1,7 +1,8 @@
 # neuralpin/httprouter
 
 ## Description:
-Helper for http request processing
+PHP HTTP Routing System for microservices, serverless and vanilla custom apps
+
 [Github Repo](https://github.com/neuralpin/httprouter)
 
 ## How to use
@@ -15,7 +16,6 @@ use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\Demo\DemoController;
 
 $Router = new Router();
-
 $Router->any('/', fn() => 'Hello world!');
 $Router->any('/home', fn() => Response::template(__DIR__ . '/template/home.html'));
 $Router->get('/api/v1/product', [DemoController::class, 'list']);
@@ -33,13 +33,8 @@ $Router
     ->ignoreParamSlash();
 
 try {
-
-    /**
-     * @var Router $Router
-     */
     $Controller = $Router->getController();
-
-} catch (\Throwable| \Exception $Exception) {
+} catch (\Exception $Exception) {
     if ($Router->isNotFoundException($Exception)) {
         $Controller = $Router->wrapController(
             fn () => Response::template(__DIR__.'/template/404.html', 404)
@@ -55,11 +50,10 @@ try {
     }
 }
 
-// dd($Router, $Router->getController(), $Router->getController()->getResponse(), $Router->getController()->getResponse()->getBody());
 echo $Controller->getResponse();
 ```
 ## Use the module with composer
 ```bash
 composer config repositories.neuralpin/HTTPRouter vcs https://github.com/neuralpin/httprouter
-composer require neuralpin/HTTPRouter
+composer require neuralpin/httprouter
 ```

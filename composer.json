@@ -1,8 +1,8 @@
 {
     "name": "neuralpin/httprouter",
     "type": "library",
-    "description": "Helper for http routing process",
-    "keywords": ["helper"],
+    "description": "PHP HTTP Routing System for microservices, serverless and vanilla custom apps",
+    "keywords": ["helper", "http", "routing"],
     "license": "GPL-3.0-only",
     "authors": [
         {

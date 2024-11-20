@@ -1,10 +1,10 @@
 <?php
 
-use Neuralpin\HTTPRouter\Router;
-use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\Demo\DemoController;
+use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\Router;
 
-$Router = new Router();
+$Router = new Router;
 
 $Router->any('/', fn () => 'Hello world!');
 $Router->any('/home', fn () => Response::template(__DIR__.'/template/home.html'));

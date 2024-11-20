@@ -3,25 +3,25 @@
 namespace Neuralpin\HTTPRouter;
 
 use Exception;
-use Stringable;
-use Neuralpin\HTTPRouter\ControllerWrapped;
-use Neuralpin\HTTPRouter\Helper\RequestData;
-use Neuralpin\HTTPRouter\Interface\RouteMapper;
-use Neuralpin\HTTPRouter\Interface\RequestState;
-use Neuralpin\HTTPRouter\Interface\RouteMatcher;
-use Neuralpin\HTTPRouter\Interface\ResponseState;
-use Neuralpin\HTTPRouter\Interface\ControllerMapper;
-use Neuralpin\HTTPRouter\Exception\NotFoundException;
-use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
 use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;
+use Neuralpin\HTTPRouter\Exception\NotFoundException;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Interface\ControllerMapper;
+use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
+use Neuralpin\HTTPRouter\Interface\RequestState;
+use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Neuralpin\HTTPRouter\Interface\RouteMapper;
+use Neuralpin\HTTPRouter\Interface\RouteMatcher;
+use Stringable;
 
 class Router implements RouteMatcher
 {
     public readonly RouteMapper $RouteCollection;
-    
+
     /**
      * Summary of ControllerWrapper
-     * @var class-string<ControllerWrapper> $ControllerWrapper
+     *
+     * @var class-string<ControllerWrapper>
      */
     public readonly string $ControllerWrapper;
 
@@ -29,31 +29,30 @@ class Router implements RouteMatcher
 
     /**
      * Summary of __construct
-     * @param class-string<RouteMapper> $RouteCollection
-     * @param class-string<ControllerMapper> $ControllerMapper
-     * @param class-string<ControllerWrapper> $ControllerWrapper
-     * @param ?RequestState $RequestState
+     *
+     * @param  class-string<RouteMapper>  $RouteCollection
+     * @param  class-string<ControllerMapper>  $ControllerMapper
+     * @param  class-string<ControllerWrapper>  $ControllerWrapper
      */
     public function __construct(
         ?string $RouteCollection = RouteCollection::class,
         ?string $ControllerMapper = Route::class,
         ?string $ControllerWrapper = ControllerWrapped::class,
         ?RequestState $RequestState = null,
-    )
-    {
-        $this->RouteCollection = new $RouteCollection();
+    ) {
+        $this->RouteCollection = new $RouteCollection;
         $this->RouteCollection->setControllerMapper($ControllerMapper);
         $this->ControllerWrapper = $ControllerWrapper;
         $RequestState ??= RequestData::createFromGlobals();
         $this->RequestState = $RequestState;
     }
 
-    public function isMethodNotAllowedException( Exception $Exception ): bool
+    public function isMethodNotAllowedException(Exception $Exception): bool
     {
         return $Exception instanceof MethodNotAllowedException;
     }
 
-    public function isNotFoundException( Exception $Exception ): bool
+    public function isNotFoundException(Exception $Exception): bool
     {
         return $Exception instanceof NotFoundException;
     }
@@ -188,15 +187,14 @@ class Router implements RouteMatcher
 
     /**
      * Summary of wrapController
-     * @param callable(mixed...): (ResponseState|Stringable|string|scalar|null) $Controller
-     * @param RequestState|null $RequestState
-     * @return ControllerWrapper
+     *
+     * @param  callable(mixed...): (ResponseState|Stringable|string|scalar|null)  $Controller
      */
     public function wrapController(array|object $Controller, ?RequestState $RequestState = null): ControllerWrapper
     {
         $RequestState ??= $this->RequestState;
 
-        $ControllerWrapped = new $this->ControllerWrapper();
+        $ControllerWrapped = new $this->ControllerWrapper;
         $ControllerWrapped->setController($Controller);
         $ControllerWrapped->setState($RequestState);
 

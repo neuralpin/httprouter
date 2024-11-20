@@ -11,7 +11,6 @@ class RouteCollection implements RouteMapper
 {
     public readonly string $ControllerMapper;
 
-
     public function setControllerMapper(string $ControllerMapper): void
     {
         $this->ControllerMapper = $ControllerMapper;

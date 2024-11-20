@@ -14,16 +14,20 @@ use Stringable;
 class ControllerWrapped implements ControllerWrapper
 {
     protected null|array|object $Controller;
+
     protected string $method;
+
     protected string $path;
+
     protected array $queryParams;
+
     protected array $routeParameters = [];
+
     protected RequestState $RequestState;
 
     public function setController(
         null|array|object $Controller
-    ): void
-    {
+    ): void {
         if (
             is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
             || is_object($Controller) && ! is_callable($Controller)
@@ -40,8 +44,7 @@ class ControllerWrapped implements ControllerWrapper
 
     public function setState(
         RequestState $RequestState,
-    ): void
-    {
+    ): void {
         $this->RequestState = $RequestState;
 
         $this->method = $this->RequestState->getMethod();
@@ -51,8 +54,7 @@ class ControllerWrapped implements ControllerWrapper
 
     public function setParams(
         array $routeParameters = [],
-    ): void 
-    {
+    ): void {
         $this->routeParameters = $routeParameters;
     }
 

@@ -31,7 +31,7 @@ class RouteCollection implements RouteMapper
      *
      * @template T of ControllerMapper
      *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
+     * @param callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
      * @return T
      */
     public function addRoute(string $method, string $path, object|array $callable): ControllerMapper

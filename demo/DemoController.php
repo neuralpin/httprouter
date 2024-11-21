@@ -1,18 +1,12 @@
 <?php
 
-namespace Neuralpin\HTTPRouter\Demo;
-
-use Neuralpin\HTTPRouter\Helper\RequestData;
-use Neuralpin\HTTPRouter\Interface\ResponseState;
 use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Helper\TemplateRender;
+use Neuralpin\HTTPRouter\Interface\ResponseState;
 
 class DemoController
 {
-    public function home(): ResponseState
-    {
-        return Response::template('template/home.html');
-    }
-
     public function get(int $id): ResponseState
     {
 
@@ -100,5 +94,32 @@ class DemoController
                 'id' => $id,
             ],
         ], 200);
+    }
+
+    public function templating(RequestData $Request): ResponseState
+    {
+        // Add query param to the URL and capture it here ?text=lorem ipsum
+        $URLData = htmlspecialchars($Request->getParam('text'));
+
+        return Response::template(
+            content: __DIR__.'/template/page_template.php',
+            context: [
+                'title' => 'Dynamic page created using the most easiest template system',
+                'content' => "
+                    <p>Pariatur irure proident excepteur sunt irure sunt elit ex sint minim elit aliqua ea Lorem. Anim nisi quis duis aliqua pariatur eu anim fugiat. Non nostrud anim in quis laboris voluptate occaecat veniam aliqua. Ullamco eu occaecat officia adipisicing velit. Amet excepteur amet ut proident tempor duis.</p>
+                    <p>Query Text: {$URLData}</p>
+                ",
+                'menu' => new TemplateRender(
+                    filepath: __DIR__.'/template/menu_template.php', 
+                    context: [
+                        'links' => [
+                            'index' => '#',
+                            'about' => '#about',
+                            'contact' => '#contact',
+                        ]
+                    ]
+                ),
+            ]
+        );
     }
 }

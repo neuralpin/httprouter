@@ -53,8 +53,9 @@ class Response
         string $content = '',
         int $status = 200,
         array $headers = [],
+        array $context = [],
     ): ResponseState {
-        $content = (string) new TemplateRender($content);
+        $content = (string) new TemplateRender($content, $context);
 
         return new ResponseRender($content, $status, $headers);
     }

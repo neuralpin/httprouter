@@ -3,16 +3,17 @@
 namespace Neuralpin\HTTPRouter;
 
 use Exception;
-use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;
-use Neuralpin\HTTPRouter\Exception\NotFoundException;
-use Neuralpin\HTTPRouter\Helper\RequestData;
-use Neuralpin\HTTPRouter\Interface\ControllerMapper;
-use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
-use Neuralpin\HTTPRouter\Interface\RequestState;
-use Neuralpin\HTTPRouter\Interface\ResponseState;
-use Neuralpin\HTTPRouter\Interface\RouteMapper;
-use Neuralpin\HTTPRouter\Interface\RouteMatcher;
 use Stringable;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Interface\RouteMapper;
+use Neuralpin\HTTPRouter\Interface\RequestState;
+use Neuralpin\HTTPRouter\Interface\RouteMatcher;
+use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Neuralpin\HTTPRouter\Helper\RequestDataHelper;
+use Neuralpin\HTTPRouter\Interface\ControllerMapper;
+use Neuralpin\HTTPRouter\Exception\NotFoundException;
+use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
+use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;
 
 class Router implements RouteMatcher
 {
@@ -43,7 +44,8 @@ class Router implements RouteMatcher
         $this->RouteCollection = new $RouteCollection;
         $this->RouteCollection->setControllerMapper($ControllerMapper);
         $this->ControllerWrapper = $ControllerWrapper;
-        $RequestState ??= RequestData::createFromGlobals();
+
+        $RequestState ??= RequestDataHelper::createStateFromGlobals(RequestData::class);
         $this->RequestState = $RequestState;
     }
 

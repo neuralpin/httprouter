@@ -60,8 +60,16 @@ try {
 
 echo $Controller->getResponse();
 ```
-## Use the module with composer
+## Use this module with composer
 ```bash
 composer config repositories.neuralpin/HTTPRouter vcs https://github.com/neuralpin/httprouter
 composer require neuralpin/httprouter
 ```
+
+### Check yourself with the demo example dir inside this repo
+Run PHP server with the next command in your console
+```bash
+php -S localhost:8001 <PathToRepoSource>/httprouter/demo/index.php
+```
+Then open in your browser or test it with Postman
+URL: http://localhost:8001

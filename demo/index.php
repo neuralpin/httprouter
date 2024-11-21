@@ -33,7 +33,7 @@ try {
 
     $Controller = $Router->getController();
 
-} catch (\Throwable|\Exception $Exception) {
+} catch (\Exception $Exception) {
     if ($Router->isNotFoundException($Exception)) {
         $Controller = $Router->wrapController(
             fn () => Response::template(content: __DIR__.'/template/404.html', status: 404)
@@ -48,6 +48,9 @@ try {
         );
     }
 }
+
+
+// $Router, $Router->getController(), $Router->getController()->getResponse(), $Router->getController()->getResponse()->getBody()
 
 // dd($Router, $Router->getController(), $Router->getController()->getResponse(), $Router->getController()->getResponse()->getBody());
 echo $Controller->getResponse();

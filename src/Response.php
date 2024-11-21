@@ -37,6 +37,18 @@ class Response
         );
     }
 
+    public static function plain(
+        string $content = '',
+        int $status = 200,
+        array $headers = [],
+    ): ResponseState {
+        return new ResponseRender(
+            $content,
+            $status,
+            $headers,
+        );
+    }
+
     public static function html(
         string $content = '',
         int $status = 200,

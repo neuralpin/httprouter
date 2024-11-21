@@ -89,7 +89,7 @@ class ControllerWrapped implements ControllerWrapper
         return null;
     }
 
-    protected function resolveParams($Controller, RequestState $RequestState, $RouteParams): array
+    public function resolveParams($Controller, RequestState $RequestState, $RouteParams): array
     {
         if (gettype($Controller) == 'object' && get_class($Controller) == 'Closure') {
             $reflection = new ReflectionFunction($Controller);

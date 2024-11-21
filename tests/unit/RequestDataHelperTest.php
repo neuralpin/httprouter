@@ -1,10 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\RequestData;
 use Neuralpin\HTTPRouter\Helper\RequestDataHelper;
-
-require __DIR__.'/../vendor/autoload.php';
 
 class RequestDataHelperTest extends TestCase
 {

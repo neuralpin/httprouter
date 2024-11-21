@@ -34,11 +34,22 @@ class Route implements RouteMapperExtended
         return $this->basePath;
     }
 
+    /**
+     * Add controller (method => controller) to the Route structure
+     * @param string $method
+     * @param callable(mixed...): mixed $controller
+     * @return Route
+     */
     public function addController(string $method, object|array $controller): static
     {
         $this->methods[strtolower($method)] = $controller;
 
         return $this;
+    }
+
+    public function getController(string $method)
+    {
+        return $this->methods[strtolower($method)] ?? $this->methods['any'] ?? null;
     }
 
     public function pathMatches(string $path): bool
@@ -48,6 +59,7 @@ class Route implements RouteMapperExtended
 
     public function methodMatches(string $method): bool
     {
+        $method = strtolower($method);
         return (isset($this->methods[$method]) || isset($this->methods['any'])) ? true : false;
     }
 
@@ -59,14 +71,13 @@ class Route implements RouteMapperExtended
         return $this;
     }
 
-    public function getController(RequestState $RequestData): ControllerWrapper
+    public function getControllerWrapped(RequestState $RequestData): ControllerWrapper
     {
 
-        $Controller = $this->methods[$RequestData->getMethod()] ?? $this->methods['any'] ?? null;
         $RouteParams = $this->bindParams($RequestData->getPath());
 
         $ControllerWrapped = new ControllerWrapped;
-        $ControllerWrapped->setController($Controller);
+        $ControllerWrapped->setController($this->getController($RequestData->getMethod()));
         $ControllerWrapped->setState($RequestData);
         $ControllerWrapped->setParams($RouteParams);
 

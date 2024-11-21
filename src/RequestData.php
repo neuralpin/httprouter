@@ -1,6 +1,6 @@
 <?php
 
-namespace Neuralpin\HTTPRouter\Helper;
+namespace Neuralpin\HTTPRouter;
 
 use Neuralpin\HTTPRouter\Interface\RequestState;
 

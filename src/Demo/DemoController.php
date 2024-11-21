@@ -1,7 +1,9 @@
 <?php
 
+namespace Neuralpin\HTTPRouter\Demo;
+
 use Neuralpin\HTTPRouter\Response;
-use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\RequestData;
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
 use Neuralpin\HTTPRouter\Interface\ResponseState;
 

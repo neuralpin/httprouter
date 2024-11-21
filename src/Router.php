@@ -4,7 +4,7 @@ namespace Neuralpin\HTTPRouter;
 
 use Exception;
 use Stringable;
-use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\RequestData;
 use Neuralpin\HTTPRouter\Interface\RouteMapper;
 use Neuralpin\HTTPRouter\Interface\RequestState;
 use Neuralpin\HTTPRouter\Interface\RouteMatcher;
@@ -74,7 +74,7 @@ class Router implements RouteMatcher
             }
 
             if ($urlMatches && $methodMatches) {
-                return $Route->getController($RequestState);
+                return $Route->getControllerWrapped($RequestState);
             }
         }
 

@@ -65,7 +65,7 @@ class ControllerWrapped implements ControllerWrapper
 
         ob_start();
         $Result = call_user_func_array($this->Controller, $params);
-        ob_clean();
+        ob_end_clean();
 
         $ResultType = gettype($Result);
 

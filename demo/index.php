@@ -1,10 +1,10 @@
 <?php
 
 require __DIR__.'/../vendor/autoload.php';
-require __DIR__.'/DemoController.php';
 
-use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\Router;
+use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\Demo\DemoController;
 
 $Router = new Router;
 
@@ -20,7 +20,7 @@ $Router->get('/api/product/:id', [DemoController::class, 'get']);
 $Router->patch('/api/product/:id', [DemoController::class, 'update']);
 $Router->delete('/api/product/:id', [DemoController::class, 'delete']);
 
-// Match whole URI when it starts with /search
+// Match URI when it starts with /search and bind as param anything before /search
 $Router->get('/search:search', function ($search) {
 
     $search = explode('/', htmlspecialchars($search));
@@ -31,9 +31,6 @@ $Router->get('/search:search', function ($search) {
 
 try {
 
-    /**
-     * @var Router $Router
-     */
     $Controller = $Router->getController();
 
 } catch (\Throwable|\Exception $Exception) {

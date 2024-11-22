@@ -2,11 +2,9 @@
 
 namespace Neuralpin\HTTPRouter\Interface;
 
-use Stringable;
-
 interface ControllerWrapper
 {
-    public function getResponse(): ResponseState|null;
+    public function getResponse(): ?ResponseState;
 
     /**
      * @param  null|callable(mixed...): mixed  $Controller

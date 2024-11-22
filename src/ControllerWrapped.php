@@ -22,7 +22,7 @@ class ControllerWrapped implements ControllerWrapper
     /**
      * @param  null|callable(mixed...): mixed  $Controller
      */
-    public function setController(
+    public function wrapController(
         null|array|object $Controller
     ): static {
         if (
@@ -41,7 +41,7 @@ class ControllerWrapped implements ControllerWrapper
         return $this;
     }
 
-    public function getController(): array|object|null
+    public function getUnwrappedController(): array|object|null
     {
         return $this->Controller;
     }
@@ -72,7 +72,7 @@ class ControllerWrapped implements ControllerWrapper
         return $this->routeParameters;
     }
 
-    public function getResponse(): null|ResponseState|Stringable
+    public function getResponse(): ?ResponseState
     {
 
         $params = $this->resolveParams($this->Controller, $this->RequestState, $this->routeParameters);
@@ -85,8 +85,7 @@ class ControllerWrapped implements ControllerWrapper
             gettype($Result) === 'object'
             && ! $Result instanceof ResponseState
             && $Result instanceof Stringable
-        )
-            || is_scalar($Result);
+        ) || is_scalar($Result);
 
         if ($shouldAdaptResponse) {
             $status = empty($Result) ? 204 : 200;

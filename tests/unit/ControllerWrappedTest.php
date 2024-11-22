@@ -9,29 +9,29 @@ use PHPUnit\Framework\TestCase;
 
 class ControllerWrappedTest extends TestCase
 {
-    public function test_set_controller()
+    public function test_wrap_controller()
     {
         $ControllerWrapped = new ControllerWrapped;
 
         // Test with a valid callable array
-        $ControllerWrapped->setController([DemoController::class, 'get']);
-        $this->assertIsArray($ControllerWrapped->getController());
+        $ControllerWrapped->wrapController([DemoController::class, 'get']);
+        $this->assertIsArray($ControllerWrapped->getUnwrappedController());
 
         // Test with a valid callable object
-        $ControllerWrapped->setController(fn () => null);
-        $this->assertIsObject($ControllerWrapped->getController());
+        $ControllerWrapped->wrapController(fn () => null);
+        $this->assertIsObject($ControllerWrapped->getUnwrappedController());
 
         // Test with invalid callables
         $this->expectException(InvalidControllerException::class);
 
         // Object exists but is not callable
-        $ControllerWrapped->setController([DemoController::class]);
+        $ControllerWrapped->wrapController([DemoController::class]);
 
         // Object exists but method does not exists
-        $ControllerWrapped->setController([DemoController::class, 'invalidMethod']);
+        $ControllerWrapped->wrapController([DemoController::class, 'invalidMethod']);
 
         // Object is not reachable
-        $ControllerWrapped->setController(['BadController', 'invalidMethod']);
+        $ControllerWrapped->wrapController(['BadController', 'invalidMethod']);
     }
 
     public function test_set_state()
@@ -64,7 +64,7 @@ class ControllerWrappedTest extends TestCase
         $requestState->method('getQueryParams')->willReturn(['param' => 'value']);
 
         $controllerWrapped = new ControllerWrapped;
-        $controllerWrapped->setController([DemoController::class, 'get']);
+        $controllerWrapped->wrapController([DemoController::class, 'get']);
         $controllerWrapped->setState($requestState);
         $controllerWrapped->setParameters(['id' => 1]);
 

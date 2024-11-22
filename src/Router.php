@@ -196,7 +196,7 @@ class Router implements RouteMatcher
         $RequestState ??= $this->RequestState;
 
         $ControllerWrapped = new $this->ControllerWrapper;
-        $ControllerWrapped->setController($Controller);
+        $ControllerWrapped->wrapController($Controller);
         $ControllerWrapped->setState($RequestState);
 
         return $ControllerWrapped;

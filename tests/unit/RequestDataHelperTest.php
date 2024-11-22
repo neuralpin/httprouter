@@ -1,25 +1,24 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-use Neuralpin\HTTPRouter\RequestData;
 use Neuralpin\HTTPRouter\Helper\RequestDataHelper;
+use Neuralpin\HTTPRouter\RequestData;
+use PHPUnit\Framework\TestCase;
 
 class RequestDataHelperTest extends TestCase
 {
-
-    public function testGetQueryParams()
+    public function test_get_query_params()
     {
         $queryString = 'param1=value1&param2=value2';
         $expected = [
             'param1' => 'value1',
-            'param2' => 'value2'
+            'param2' => 'value2',
         ];
         $this->assertEquals($expected, RequestDataHelper::getQueryParams($queryString));
 
         $queryString = 'param1=value1&param2=';
         $expected = [
             'param1' => 'value1',
-            'param2' => ''
+            'param2' => '',
         ];
         $this->assertEquals($expected, RequestDataHelper::getQueryParams($queryString));
 
@@ -28,29 +27,29 @@ class RequestDataHelperTest extends TestCase
         $this->assertEquals($expected, RequestDataHelper::getQueryParams($queryString));
     }
 
-    public function testGetAllHeaders()
+    public function test_get_all_headers()
     {
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['HTTP_USER_AGENT'] = 'PHPUnit';
 
         $expected = [
             'Host' => 'localhost',
-            'User-Agent' => 'PHPUnit'
+            'User-Agent' => 'PHPUnit',
         ];
 
         $this->assertEquals($expected, RequestDataHelper::getAllHeaders());
     }
 
-    public function testGetBodyString()
+    public function test_get_body_string()
     {
-        $body = fn()=> 'test body content';
+        $body = fn () => 'test body content';
 
         $expected = 'test body content';
 
         $this->assertEquals($expected, RequestDataHelper::getBodyString($body));
     }
 
-    public function testCreateFromGlobals()
+    public function test_create_from_globals()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = 'test/path';

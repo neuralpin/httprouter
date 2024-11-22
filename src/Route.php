@@ -36,8 +36,8 @@ class Route implements RouteMapperExtended
 
     /**
      * Add controller (method => controller) to the Route structure
-     * @param string $method
-     * @param callable(mixed...): mixed $controller
+     *
+     * @param  callable(mixed...): mixed  $controller
      * @return Route
      */
     public function addController(string $method, object|array $controller): static
@@ -60,6 +60,7 @@ class Route implements RouteMapperExtended
     public function methodMatches(string $method): bool
     {
         $method = strtolower($method);
+
         return (isset($this->methods[$method]) || isset($this->methods['any'])) ? true : false;
     }
 

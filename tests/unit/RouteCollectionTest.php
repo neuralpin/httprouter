@@ -1,30 +1,30 @@
 <?php
 
-use Neuralpin\HTTPRouter\Route;
-use PHPUnit\Framework\TestCase;
-use Neuralpin\HTTPRouter\RouteCollection;
 use Neuralpin\HTTPRouter\Interface\ControllerMapper;
+use Neuralpin\HTTPRouter\Route;
+use Neuralpin\HTTPRouter\RouteCollection;
+use PHPUnit\Framework\TestCase;
 
 class RouteCollectionTest extends TestCase
 {
-    public function testSetControllerMapper()
+    public function test_set_controller_mapper()
     {
-        $routeCollection = new RouteCollection();
+        $routeCollection = new RouteCollection;
         $routeCollection->setControllerMapper(ControllerMapper::class);
 
         $this->assertEquals(ControllerMapper::class, $routeCollection->ControllerMapper);
     }
 
-    public function testGetRoutes()
+    public function test_get_routes()
     {
-        $routeCollection = new RouteCollection();
+        $routeCollection = new RouteCollection;
         $this->assertIsArray($routeCollection->getRoutes());
         $this->assertEmpty($routeCollection->getRoutes());
     }
 
-    public function testAddRoute()
+    public function test_add_route()
     {
-        $routeCollection = new RouteCollection();
+        $routeCollection = new RouteCollection;
         $routeCollection->setControllerMapper(Route::class);
 
         $callable = function () {

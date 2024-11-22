@@ -2,10 +2,10 @@
 
 namespace Neuralpin\HTTPRouter\Demo;
 
-use Neuralpin\HTTPRouter\Response;
-use Neuralpin\HTTPRouter\RequestData;
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
 use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Neuralpin\HTTPRouter\RequestData;
+use Neuralpin\HTTPRouter\Response;
 
 class DemoController
 {
@@ -112,13 +112,13 @@ class DemoController
                     <p>Query Text: {$URLData}</p>
                 ",
                 'menu' => new TemplateRender(
-                    filepath: __DIR__.'/template/menu_template.php', 
+                    filepath: __DIR__.'/template/menu_template.php',
                     context: [
                         'links' => [
                             'index' => '#',
                             'about' => '#about',
                             'contact' => '#contact',
-                        ]
+                        ],
                     ]
                 ),
             ]

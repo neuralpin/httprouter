@@ -1,48 +1,45 @@
 <?php
 
+use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
+use Neuralpin\HTTPRouter\Interface\RequestState;
 use Neuralpin\HTTPRouter\Route;
 use PHPUnit\Framework\TestCase;
-use Neuralpin\HTTPRouter\RequestData;
-use Neuralpin\HTTPRouter\ControllerWrapped;
-use Neuralpin\HTTPRouter\Interface\RequestState;
-use Neuralpin\HTTPRouter\Helper\RequestDataHelper;
-use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
 
 class RouteTest extends TestCase
 {
-    public function testGetBasePath()
+    public function test_get_base_path()
     {
         $Route = new Route('/test/path');
         $this->assertEquals('/test/path', $Route->getBasePath());
     }
 
-    public function testAddController()
+    public function test_add_controller()
     {
         $Route = new Route('/test/path');
-        $Controller = fn()=> 'Response test';
+        $Controller = fn () => 'Response test';
         $Route->addController('GET', $Controller);
-        
+
         $this->assertSame($Controller, $Route->getController('GET'));
     }
 
-    public function testPathMatches()
+    public function test_path_matches()
     {
         $Route = new Route('/test/:id');
         $this->assertTrue($Route->pathMatches('/test/123'));
         $this->assertFalse($Route->pathMatches('/test/'));
     }
 
-    public function testMethodMatches()
+    public function test_method_matches()
     {
         $Route = new Route('/test/path');
-        $Route->addController('GET', fn()=>null);
+        $Route->addController('GET', fn () => null);
         $this->assertTrue($Route->methodMatches('GET'));
         $this->assertFalse($Route->methodMatches('POST'));
     }
 
-    public function testGetControllerWrapped()
+    public function test_get_controller_wrapped()
     {
-        $Route = new Route('/test/path', 'GET', fn()=>null);
+        $Route = new Route('/test/path', 'GET', fn () => null);
         $requestState = $this->createMock(RequestState::class);
         $requestState->method('getMethod')->willReturn('GET');
         $requestState->method('getPath')->willReturn('/test/path');
@@ -51,7 +48,7 @@ class RouteTest extends TestCase
         $this->assertInstanceOf(ControllerWrapper::class, $controllerWrapper);
     }
 
-    public function testBindParams()
+    public function test_bind_params()
     {
         $Route = new Route('/test/:id/:name');
         $params = $Route->bindParams('/test/123/john');
@@ -59,7 +56,7 @@ class RouteTest extends TestCase
         $this->assertEquals($expected, $params);
     }
 
-    public function testIgnoreParamSlash()
+    public function test_ignore_param_slash()
     {
         $Route = new Route('/test/:param');
         $Route->ignoreParamSlash();

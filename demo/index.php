@@ -2,9 +2,9 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use Neuralpin\HTTPRouter\Router;
-use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\Demo\DemoController;
+use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\Router;
 
 $Router = new Router;
 
@@ -48,7 +48,6 @@ try {
         );
     }
 }
-
 
 // $Router, $Router->getController(), $Router->getController()->getResponse(), $Router->getController()->getResponse()->getBody()
 

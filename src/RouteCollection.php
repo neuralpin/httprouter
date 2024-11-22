@@ -13,8 +13,8 @@ class RouteCollection implements RouteMapper
 
     /**
      * Inject ControllerMapper Dependency
-     * @param class-string<ControllerMapper> $ControllerMapper
-     * @return void
+     *
+     * @param  class-string<ControllerMapper>  $ControllerMapper
      */
     public function setControllerMapper(string $ControllerMapper): void
     {
@@ -36,7 +36,7 @@ class RouteCollection implements RouteMapper
      *
      * @template T of ControllerMapper
      *
-     * @param callable(mixed ...): (ResponseState|Stringable|string|scalar|null) $callable
+     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
      * @return T
      */
     public function addRoute(string $method, string $path, object|array $callable): ControllerMapper

@@ -1,11 +1,11 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use Neuralpin\HTTPRouter\ControllerWrapped;
 use Neuralpin\HTTPRouter\Demo\DemoController;
+use Neuralpin\HTTPRouter\Exception\InvalidControllerException;
 use Neuralpin\HTTPRouter\Interface\RequestState;
 use Neuralpin\HTTPRouter\Interface\ResponseState;
-use Neuralpin\HTTPRouter\Exception\InvalidControllerException;
+use PHPUnit\Framework\TestCase;
 
 class ControllerWrappedTest extends TestCase
 {
@@ -52,9 +52,9 @@ class ControllerWrappedTest extends TestCase
     //     $this->assertEquals($params, $controllerWrapped->routeParameters);
     // }
 
-    public function testGetResponse()
+    public function test_get_response()
     {
-        $controllerWrapped = new ControllerWrapped();
+        $controllerWrapped = new ControllerWrapped;
         $controllerWrapped->setController([DemoController::class, 'get']);
 
         $requestState = $this->createMock(RequestState::class);
@@ -72,9 +72,9 @@ class ControllerWrappedTest extends TestCase
         $this->assertInstanceOf(ResponseState::class, $response);
     }
 
-    public function testResolveParams()
+    public function test_resolve_params()
     {
-        $controllerWrapped = new ControllerWrapped();
+        $controllerWrapped = new ControllerWrapped;
         $controller = [DemoController::class, 'get'];
         $requestState = $this->createMock(RequestState::class);
         $routeParams = ['id' => 1];

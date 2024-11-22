@@ -1,5 +1,5 @@
 <nav>
-    <?php foreach ($links as $text => $link): ?>
+    <?php foreach ($links as $text => $link) { ?>
         <a href="<?php echo $link ?>"><?php echo $text ?></a>
-    <?php endforeach; ?>
+    <?php } ?>
 </nav>

@@ -46,6 +46,7 @@ class ResponseRender implements ResponseState, Stringable
     public function setQueryParams(array $params): static
     {
         $this->params = $params;
+
         return $this;
     }
 
@@ -57,6 +58,7 @@ class ResponseRender implements ResponseState, Stringable
     public function setMethod(string $method): static
     {
         $this->method = $method;
+
         return $this;
     }
 
@@ -68,6 +70,7 @@ class ResponseRender implements ResponseState, Stringable
     public function setPath(string $path): static
     {
         $this->path = trim($path, '/');
+
         return $this;
     }
 

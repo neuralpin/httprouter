@@ -7,9 +7,13 @@ use Neuralpin\HTTPRouter\Interface\RequestState;
 class RequestData implements RequestState
 {
     protected array $headers = [];
+
     protected object|array|null $body = [];
+
     protected string $method = 'get';
+
     protected string $path = '/';
+
     protected array $queryParams = [];
 
     public function setHeaders(array $headers = [])
@@ -61,7 +65,6 @@ class RequestData implements RequestState
     {
         return $this->queryParams;
     }
-
 
     public function getParam(string $name): mixed
     {

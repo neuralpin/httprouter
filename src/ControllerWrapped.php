@@ -29,8 +29,8 @@ class ControllerWrapped implements ControllerWrapper
         null|array|object $Controller
     ): static {
         if (
-            is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
-            || is_object($Controller) && !is_callable($Controller)
+            is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
+            || is_object($Controller) && ! is_callable($Controller)
         ) {
             throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
         }
@@ -60,6 +60,7 @@ class ControllerWrapped implements ControllerWrapper
         array $routeParameters = [],
     ) {
         $this->routeParameters = $routeParameters;
+
         return $this;
     }
 
@@ -74,7 +75,7 @@ class ControllerWrapped implements ControllerWrapper
 
         $shouldAdaptResponse = (
             gettype($Result) === 'object'
-            && !$Result instanceof ResponseState
+            && ! $Result instanceof ResponseState
             && $Result instanceof Stringable
         )
             || is_scalar($Result);
@@ -116,7 +117,7 @@ class ControllerWrapped implements ControllerWrapper
                 continue;
             }
 
-            if (!isset($RouteParams[$paramName])) {
+            if (! isset($RouteParams[$paramName])) {
                 throw new DomainException("Cannot resolve the parameter: '{$paramName}'");
             }
 

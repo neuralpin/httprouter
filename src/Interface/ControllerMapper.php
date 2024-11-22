@@ -2,9 +2,6 @@
 
 namespace Neuralpin\HTTPRouter\Interface;
 
-use Neuralpin\HTTPRouter\Interface\RequestState;
-use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
-
 interface ControllerMapper
 {
     public function addController(string $method, array|object $controller);

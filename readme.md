@@ -11,9 +11,9 @@ Example usage
 ```php
 require __DIR__.'/../vendor/autoload.php';
 
-use Neuralpin\HTTPRouter\Router;
-use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\Demo\DemoController;
+use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\Router;
 
 $Router = new Router;
 
@@ -42,7 +42,7 @@ try {
 
     $Controller = $Router->getController();
 
-} catch (\Throwable|\Exception $Exception) {
+} catch (\Exception $Exception) {
     if ($Router->isNotFoundException($Exception)) {
         $Controller = $Router->wrapController(
             fn () => Response::template(content: __DIR__.'/template/404.html', status: 404)
@@ -62,7 +62,7 @@ echo $Controller->getResponse();
 ```
 ## Use this module with composer
 ```bash
-composer config repositories.neuralpin/HTTPRouter vcs https://github.com/neuralpin/httprouter
+composer config repositories.neuralpin/httprouter vcs https://github.com/neuralpin/httprouter
 composer require neuralpin/httprouter
 ```
 

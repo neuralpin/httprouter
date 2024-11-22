@@ -67,7 +67,7 @@ class ResponseRender implements ResponseState, Stringable
 
     public function setPath(string $path): static
     {
-        $this->path = $path;
+        $this->path = trim($path, '/');
         return $this;
     }
 

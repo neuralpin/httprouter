@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\Demo\DemoController;
+use Neuralpin\HTTPRouter\Exception\NotFoundException;
+use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;
 
 class RouterIntegrationTest extends TestCase
 {
@@ -17,14 +19,11 @@ class RouterIntegrationTest extends TestCase
         $Router = new Router();
         $Router->get('/', fn() => $responseText);
 
-        // $Controller = $Router->getController();
-        // $Response = $Controller->getResponse();
-
         $Response = $Router->getController()->getResponse();
 
-        $ResponseTest = Response::plain($responseText)->setPath('');
+        $ExpectedResponse = Response::plain($responseText)->setPath('');
 
-        $this->assertEquals($ResponseTest, $Response);
+        $this->assertEquals($ExpectedResponse, $Response);
         $this->assertEquals($responseText, $Response->getBody());
     }
 
@@ -38,47 +37,68 @@ class RouterIntegrationTest extends TestCase
 
         $Response = $Router->getController()->getResponse();
 
-        $ResponseTest = Response::json([
+        $ExpectedResponse = Response::json([
+            'id' => 1,
+            'data' => [
                 'id' => 1,
-                'data' => [
-                    'id' => 1,
-                    'title' => 'Lorem ipsum',
-                    'price' => 123,
-                ],
-            ])
+                'title' => 'Lorem ipsum',
+                'price' => 123,
+            ],
+        ])
             ->setParams([
                 'id' => 1,
             ])
-            ->setPath('api/product/1');
+            ->setPath($_SERVER['REQUEST_URI']);
 
-        $this->assertEquals($ResponseTest, $Response);
+        $this->assertEquals($ExpectedResponse, $Response);
     }
 
-    // public function testRouteWithForwardSlashAsParameter()
-    // {
-    //     $_SERVER['REQUEST_METHOD'] = 'GET';
-    //     $_SERVER['REQUEST_URI'] = '/search/product/1';
+    public function testRouteWithForwardSlashAsParameter()
+    {
+        $searchingFor = 'lorem/ipsum';
 
-    //     $Router = new Router();
-    //     $Router
-    //         ->get('/api/product/:id', [DemoController::class, 'get']);
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = "/search/$searchingFor";
 
-    //     $Response = $Router->getController()->getResponse();
+        $Router = new Router();
+        $Router
+            ->get('search/:searching', fn($searching) => $searching)
+            ->ignoreParamSlash();
 
-    //     $ResponseTest = Response::json([
-    //         'id' => 1,
-    //         'data' => [
-    //             'id' => 1,
-    //             'title' => 'Lorem ipsum',
-    //             'price' => 123,
-    //         ],
-    //     ])
-    //         ->setParams([
-    //             'id' => 1,
-    //         ])
-    //         ->setPath('api/product/1');
+        $Response = $Router->getController()->getResponse();
 
-    //     $this->assertEquals($ResponseTest, $Response);
-    // }
+        $ExpectedResponse = Response::plain($searchingFor)
+            ->setParams([
+                'searching' => $searchingFor,
+            ])
+            ->setPath($_SERVER['REQUEST_URI']);
+
+
+        $this->assertEquals($ExpectedResponse, $Response);
+    }
+
+    public function testNotFoundException()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/this-page-does-not-exists';
+
+        $Router = new Router();
+        $Router->get('/', fn() => null);
+
+        $this->expectException(NotFoundException::class);
+        $Response = $Router->getController()->getResponse();
+    }
+
+    public function testMethodNotAllowedException()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['REQUEST_URI'] = '/';
+
+        $Router = new Router();
+        $Router->get('/', fn() => null);
+
+        $this->expectException(MethodNotAllowedException::class);
+        $Response = $Router->getController()->getResponse();
+    }
 
 }

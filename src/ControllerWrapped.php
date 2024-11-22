@@ -27,10 +27,10 @@ class ControllerWrapped implements ControllerWrapper
 
     public function setController(
         null|array|object $Controller
-    ): void {
+    ): static {
         if (
-            is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
-            || is_object($Controller) && ! is_callable($Controller)
+            is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
+            || is_object($Controller) && !is_callable($Controller)
         ) {
             throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
         }
@@ -40,22 +40,27 @@ class ControllerWrapped implements ControllerWrapper
         }
 
         $this->Controller = $Controller;
+
+        return $this;
     }
 
     public function setState(
         RequestState $RequestState,
-    ): void {
+    ): static {
         $this->RequestState = $RequestState;
 
         $this->method = $this->RequestState->getMethod();
         $this->path = $this->RequestState->getPath();
         $this->queryParams = $this->RequestState->getQueryParams();
+
+        return $this;
     }
 
     public function setParams(
         array $routeParameters = [],
-    ): void {
+    ) {
         $this->routeParameters = $routeParameters;
+        return $this;
     }
 
     public function getResponse(): null|ResponseState|Stringable
@@ -67,23 +72,26 @@ class ControllerWrapped implements ControllerWrapper
         $Result = call_user_func_array($this->Controller, $params);
         ob_end_clean();
 
-        $ResultType = gettype($Result);
+        $shouldAdaptResponse = (
+            gettype($Result) === 'object'
+            && !$Result instanceof ResponseState
+            && $Result instanceof Stringable
+        )
+            || is_scalar($Result);
 
-        if ($ResultType === 'object' && $Result instanceof ResponseState) {
+        if ($shouldAdaptResponse) {
+            $status = empty($Result) ? 204 : 200;
+            $body = (string) $Result;
+            $Result = new ResponseRender($body, $status);
+        }
+
+        if ($Result instanceof ResponseState) {
             $Result->setQueryParams($this->queryParams);
             $Result->setParams($params);
             $Result->setMethod($this->method);
             $Result->setPath($this->path);
 
             return $Result;
-        } elseif (
-            is_scalar($Result)
-            || ($ResultType === 'object' && $Result instanceof Stringable)
-        ) {
-            $status = empty($Result) ? 204 : 200;
-            $body = (string) $Result;
-
-            return new ResponseRender($body, $status);
         }
 
         return null;
@@ -108,7 +116,7 @@ class ControllerWrapped implements ControllerWrapper
                 continue;
             }
 
-            if (! isset($RouteParams[$paramName])) {
+            if (!isset($RouteParams[$paramName])) {
                 throw new DomainException("Cannot resolve the parameter: '{$paramName}'");
             }
 

@@ -15,21 +15,18 @@ class ControllerWrapped implements ControllerWrapper
 {
     protected null|array|object $Controller;
 
-    protected string $method;
-
-    protected string $path;
-
-    protected array $queryParams;
-
     protected array $routeParameters = [];
 
     protected RequestState $RequestState;
 
+    /**
+     * @param  null|callable(mixed...): mixed  $Controller
+     */
     public function setController(
         null|array|object $Controller
     ): static {
         if (
-            is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
+            is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1] ?? ''))
             || is_object($Controller) && ! is_callable($Controller)
         ) {
             throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
@@ -44,24 +41,35 @@ class ControllerWrapped implements ControllerWrapper
         return $this;
     }
 
+    public function getController(): array|object|null
+    {
+        return $this->Controller;
+    }
+
     public function setState(
         RequestState $RequestState,
     ): static {
         $this->RequestState = $RequestState;
 
-        $this->method = $this->RequestState->getMethod();
-        $this->path = $this->RequestState->getPath();
-        $this->queryParams = $this->RequestState->getQueryParams();
-
         return $this;
     }
 
-    public function setParams(
+    public function getState(): RequestState
+    {
+        return $this->RequestState;
+    }
+
+    public function setParameters(
         array $routeParameters = [],
     ) {
         $this->routeParameters = $routeParameters;
 
         return $this;
+    }
+
+    public function getParameters(): array
+    {
+        return $this->routeParameters;
     }
 
     public function getResponse(): null|ResponseState|Stringable
@@ -87,10 +95,10 @@ class ControllerWrapped implements ControllerWrapper
         }
 
         if ($Result instanceof ResponseState) {
-            $Result->setQueryParams($this->queryParams);
+            $Result->setQueryParams($this->RequestState->getQueryParams());
             $Result->setParams($params);
-            $Result->setMethod($this->method);
-            $Result->setPath($this->path);
+            $Result->setMethod($this->RequestState->getMethod());
+            $Result->setPath($this->RequestState->getPath());
 
             return $Result;
         }

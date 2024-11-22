@@ -9,65 +9,66 @@ use PHPUnit\Framework\TestCase;
 
 class ControllerWrappedTest extends TestCase
 {
-    // public function testSetController()
-    // {
-    //     $controllerWrapped = new ControllerWrapped();
+    public function test_set_controller()
+    {
+        $ControllerWrapped = new ControllerWrapped;
 
-    //     // Test with a valid callable array
-    //     $controllerWrapped->setController([DemoController::class, 'get']);
-    //     $this->assertIsArray($controllerWrapped->Controller);
+        // Test with a valid callable array
+        $ControllerWrapped->setController([DemoController::class, 'get']);
+        $this->assertIsArray($ControllerWrapped->getController());
 
-    //     // Test with a valid callable object
-    //     $controllerWrapped->setController(new DemoController());
-    //     $this->assertIsObject($controllerWrapped->Controller);
+        // Test with a valid callable object
+        $ControllerWrapped->setController(fn () => null);
+        $this->assertIsObject($ControllerWrapped->getController());
 
-    //     // Test with an invalid callable
-    //     $this->expectException(InvalidControllerException::class);
-    //     $controllerWrapped->setController([DemoController::class, 'invalidMethod']);
-    // }
+        // Test with invalid callables
+        $this->expectException(InvalidControllerException::class);
 
-    // public function testSetState()
-    // {
-    //     $controllerWrapped = new ControllerWrapped();
-    //     $requestState = $this->createMock(RequestState::class);
-    //     $requestState->method('getMethod')->willReturn('GET');
-    //     $requestState->method('getPath')->willReturn('/test/path');
-    //     $requestState->method('getQueryParams')->willReturn(['param' => 'value']);
+        // Object exists but is not callable
+        $ControllerWrapped->setController([DemoController::class]);
 
-    //     $controllerWrapped->setState($requestState);
+        // Object exists but method does not exists
+        $ControllerWrapped->setController([DemoController::class, 'invalidMethod']);
 
-    //     $this->assertSame($requestState, $controllerWrapped->RequestState);
-    //     $this->assertEquals('GET', $controllerWrapped->method);
-    //     $this->assertEquals('/test/path', $controllerWrapped->path);
-    //     $this->assertEquals(['param' => 'value'], $controllerWrapped->queryParams);
-    // }
+        // Object is not reachable
+        $ControllerWrapped->setController(['BadController', 'invalidMethod']);
+    }
 
-    // public function testSetParams()
-    // {
-    //     $controllerWrapped = new ControllerWrapped();
-    //     $params = ['id' => 1, 'name' => 'test'];
+    public function test_set_state()
+    {
+        $requestState = $this->createMock(RequestState::class);
+        $requestState->method('getMethod')->willReturn('GET');
+        $requestState->method('getPath')->willReturn('/test/path');
+        $requestState->method('getQueryParams')->willReturn(['param' => 'value']);
 
-    //     $controllerWrapped->setParams($params);
+        $controllerWrapped = new ControllerWrapped;
+        $controllerWrapped->setState($requestState);
+        $this->assertSame($requestState, $controllerWrapped->getState());
+    }
 
-    //     $this->assertEquals($params, $controllerWrapped->routeParameters);
-    // }
+    public function test_set_params()
+    {
+        $controllerWrapped = new ControllerWrapped;
+        $params = ['id' => 1, 'name' => 'test'];
+
+        $controllerWrapped->setParameters($params);
+
+        $this->assertEquals($params, $controllerWrapped->getParameters());
+    }
 
     public function test_get_response()
     {
-        $controllerWrapped = new ControllerWrapped;
-        $controllerWrapped->setController([DemoController::class, 'get']);
-
         $requestState = $this->createMock(RequestState::class);
         $requestState->method('getMethod')->willReturn('GET');
         $requestState->method('getPath')->willReturn('/test/id/1');
         $requestState->method('getQueryParams')->willReturn(['param' => 'value']);
 
+        $controllerWrapped = new ControllerWrapped;
+        $controllerWrapped->setController([DemoController::class, 'get']);
         $controllerWrapped->setState($requestState);
-        $controllerWrapped->setParams(['id' => 1]);
+        $controllerWrapped->setParameters(['id' => 1]);
 
         $response = $controllerWrapped->getResponse();
-
-        // $response->getParams();
 
         $this->assertInstanceOf(ResponseState::class, $response);
     }

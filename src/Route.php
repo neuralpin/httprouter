@@ -80,7 +80,7 @@ class Route implements RouteMapperExtended
         $ControllerWrapped = (new ControllerWrapped)
             ->setController($this->getController($RequestData->getMethod()))
             ->setState($RequestData)
-            ->setParams($RouteParams);
+            ->setParameters($RouteParams);
 
         return $ControllerWrapped;
     }

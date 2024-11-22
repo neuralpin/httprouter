@@ -9,11 +9,11 @@ interface ControllerWrapper
     public function getResponse(): ResponseState|Stringable|string|scalar|null;
 
     /**
-     * @param  callable(mixed...): (ResponseState|Stringable|string|scalar|null)  $Controller
+     * @param  null|callable(mixed...): mixed  $Controller
      */
     public function setController(null|array|object $Controller);
 
     public function setState(RequestState $RequestState);
 
-    public function setParams(array $RouteParams);
+    public function setParameters(array $RouteParams);
 }

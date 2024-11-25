@@ -31,9 +31,11 @@ class ResponseRender implements ResponseState, Stringable
         $this->headers = $headers;
     }
 
-    public function setParams(array $params)
+    public function setParams(array $params): static
     {
         $this->params = $params;
+
+        return $this;
     }
 
     public function getParams(): array
@@ -41,9 +43,11 @@ class ResponseRender implements ResponseState, Stringable
         return $this->params;
     }
 
-    public function setQueryParams(array $params)
+    public function setQueryParams(array $params): static
     {
         $this->params = $params;
+
+        return $this;
     }
 
     public function getQueryParams(): array
@@ -51,9 +55,11 @@ class ResponseRender implements ResponseState, Stringable
         return $this->params;
     }
 
-    public function setMethod(string $method)
+    public function setMethod(string $method): static
     {
         $this->method = $method;
+
+        return $this;
     }
 
     public function getMethod(): string
@@ -61,9 +67,11 @@ class ResponseRender implements ResponseState, Stringable
         return $this->method;
     }
 
-    public function setPath(string $path)
+    public function setPath(string $path): static
     {
-        $this->path = $path;
+        $this->path = trim($path, '/');
+
+        return $this;
     }
 
     public function getPath(): string
@@ -71,9 +79,11 @@ class ResponseRender implements ResponseState, Stringable
         return $this->path;
     }
 
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): static
     {
         $this->headers = $headers;
+
+        return $this;
     }
 
     public function getHeaders(): array
@@ -81,9 +91,11 @@ class ResponseRender implements ResponseState, Stringable
         return $this->headers;
     }
 
-    public function setBody(string $body)
+    public function setBody(string $body): static
     {
         $this->body = $body;
+
+        return $this;
     }
 
     public function getBody(): string
@@ -91,9 +103,11 @@ class ResponseRender implements ResponseState, Stringable
         return $this->body;
     }
 
-    public function setStatus(int $status)
+    public function setStatus(int $status): static
     {
         $this->status = $status;
+
+        return $this;
     }
 
     public function getStatus(): int

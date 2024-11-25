@@ -2,11 +2,11 @@
 
 namespace Neuralpin\HTTPRouter\Interface;
 
-interface ControllerMaper
+interface ControllerMapper
 {
     public function addController(string $method, array|object $controller);
 
-    public function getController(RequestState $RequestState): ?ControllerWrapper;
+    public function getControllerWrapped(RequestState $RequestState): ?ControllerWrapper;
 
     public function pathMatches(string $path): bool;
 

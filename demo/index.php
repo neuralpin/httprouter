@@ -1,14 +1,5 @@
-# neuralpin/httprouter
+<?php
 
-## Description:
-PHP HTTP Routing System for microservices, serverless and vanilla custom apps
-
-[Github Repo](https://github.com/neuralpin/httprouter)
-
-## How to use
-
-Example usage
-```php
 require __DIR__.'/../vendor/autoload.php';
 
 use Neuralpin\HTTPRouter\Demo\DemoController;
@@ -58,18 +49,7 @@ try {
     }
 }
 
-echo $Controller->getResponse();
-```
-## Use this module with composer
-```bash
-composer config repositories.neuralpin/httprouter vcs https://github.com/neuralpin/httprouter
-composer require neuralpin/httprouter
-```
+// $Router, $Router->getController(), $Router->getController()->getResponse(), $Router->getController()->getResponse()->getBody()
 
-### Check yourself with the demo example dir inside this repo
-Run PHP server with the next command in your console
-```bash
-php -S localhost:8001 <PathToRepoSource>/httprouter/demo/index.php
-```
-Then open in your browser or test it with Postman
-URL: http://localhost:8001
+// dd($Router, $Router->getController(), $Router->getController()->getResponse(), $Router->getController()->getResponse()->getBody());
+echo $Controller->getResponse();

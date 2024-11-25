@@ -1,8 +1,8 @@
 {
     "name": "neuralpin/httprouter",
     "type": "library",
-    "description": "Helper for http routing process",
-    "keywords": ["helper"],
+    "description": "PHP HTTP Routing System for microservices, serverless and vanilla custom apps",
+    "keywords": ["helper", "http", "routing"],
     "license": "GPL-3.0-only",
     "authors": [
         {
@@ -16,5 +16,10 @@
         "psr-4": {
             "Neuralpin\\HTTPRouter\\": "src/"
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^7.1",
+        "phpunit/phpunit": "^11.4",
+        "laravel/pint": "^1.18"
     }
 }

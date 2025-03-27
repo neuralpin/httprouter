@@ -21,5 +21,8 @@
         "symfony/var-dumper": "^7.1",
         "phpunit/phpunit": "^11.4",
         "laravel/pint": "^1.18"
+    },
+    "scripts": {        
+        "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests"
     }
 }

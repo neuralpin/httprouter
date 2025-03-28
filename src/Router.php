@@ -14,6 +14,9 @@ use Neuralpin\HTTPRouter\Interface\RouteMapper;
 use Neuralpin\HTTPRouter\Interface\RouteMatcher;
 use Stringable;
 
+/**
+ * @template T of ControllerMapper
+ */
 class Router implements RouteMatcher
 {
     public readonly RouteMapper $RouteCollection;
@@ -83,13 +86,10 @@ class Router implements RouteMatcher
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
-     * @param  T  $ControllerMapper
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      * @return T
      */
-    public function any(string $path, object|array $callable)
+    public function any(string $path, object|array $callable): ControllerMapper
     {
         return $this->RouteCollection->addRoute('any', $path, $callable);
     }
@@ -97,13 +97,10 @@ class Router implements RouteMatcher
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
-     * @param  T  $ControllerMapper
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      * @return T
      */
-    public function get(string $path, object|array $callable)
+    public function get(string $path, object|array $callable): ControllerMapper
     {
         return $this->RouteCollection->addRoute('get', $path, $callable);
     }
@@ -111,12 +108,10 @@ class Router implements RouteMatcher
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      * @return T
      */
-    public function post(string $path, object|array $callable)
+    public function post(string $path, object|array $callable): ControllerMapper
     {
         return $this->RouteCollection->addRoute('post', $path, $callable);
     }
@@ -124,12 +119,10 @@ class Router implements RouteMatcher
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      * @return T
      */
-    public function put(string $path, object|array $callable)
+    public function put(string $path, object|array $callable): ControllerMapper
     {
         return $this->RouteCollection->addRoute('put', $path, $callable);
     }
@@ -137,12 +130,10 @@ class Router implements RouteMatcher
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      * @return T
      */
-    public function patch(string $path, object|array $callable)
+    public function patch(string $path, object|array $callable): ControllerMapper
     {
         return $this->RouteCollection->addRoute('patch', $path, $callable);
     }
@@ -150,12 +141,10 @@ class Router implements RouteMatcher
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      * @return T
      */
-    public function delete(string $path, object|array $callable)
+    public function delete(string $path, object|array $callable): ControllerMapper
     {
         return $this->RouteCollection->addRoute('delete', $path, $callable);
     }
@@ -163,12 +152,10 @@ class Router implements RouteMatcher
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      * @return T
      */
-    public function options(string $path, object|array $callable)
+    public function options(string $path, object|array $callable): ControllerMapper
     {
         return $this->RouteCollection->addRoute('options', $path, $callable);
     }
@@ -176,20 +163,18 @@ class Router implements RouteMatcher
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      * @return T
      */
-    public function head(string $path, object|array $callable)
+    public function head(string $path, object|array $callable): ControllerMapper
     {
         return $this->RouteCollection->addRoute('head', $path, $callable);
     }
 
     /**
-     * Summary of wrapController
+     * Return an instance of the ControllerWrapper
      *
-     * @param  callable(mixed...): (ResponseState|Stringable|string|scalar|null)  $Controller
+     * @param  callable(mixed...): (ResponseState|Stringable|scalar|null)  $Controller
      */
     public function wrapController(array|object $Controller, ?RequestState $RequestState = null): ControllerWrapper
     {

@@ -101,10 +101,10 @@ class DemoController
     public function templating(RequestData $Request): ResponseState
     {
         // Add query param to the URL and capture it here ?text=lorem ipsum
-        $URLData = htmlspecialchars($Request->getParam('text'));
+        $URLData = htmlspecialchars($Request->getParam('text') ?? '');
 
         return Response::template(
-            content: __DIR__.'/template/page_template.php',
+            content: __DIR__.'/../../demo/template/page_template.php',
             context: [
                 'title' => 'Dynamic page created using the most easiest template system',
                 'content' => "
@@ -112,7 +112,7 @@ class DemoController
                     <p>Query Text: {$URLData}</p>
                 ",
                 'menu' => new TemplateRender(
-                    filepath: __DIR__.'/template/menu_template.php',
+                    filepath: __DIR__.'/../../demo/template/menu_template.php',
                     context: [
                         'links' => [
                             'index' => '#',

@@ -12,7 +12,7 @@ class RouteCollectionTest extends TestCase
         $routeCollection = new RouteCollection;
         $routeCollection->setControllerMapper(ControllerMapper::class);
 
-        $this->assertEquals(ControllerMapper::class, $routeCollection->ControllerMapper);
+        $this->assertEquals(ControllerMapper::class, $routeCollection->getControllerMapper());
     }
 
     public function test_get_routes()

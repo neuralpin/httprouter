@@ -20,9 +20,11 @@
     "require-dev": {
         "symfony/var-dumper": "^7.1",
         "phpunit/phpunit": "^11.4",
-        "laravel/pint": "^1.18"
+        "laravel/pint": "^1.18",
+        "phpstan/phpstan": "^2.1"
     },
     "scripts": {        
-        "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests"
+        "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests",
+        "analyze": "vendor/bin/phpstan analyse src"
     }
 }

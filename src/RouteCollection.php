@@ -9,7 +9,7 @@ use Stringable;
 
 class RouteCollection implements RouteMapper
 {
-    public readonly string $ControllerMapper;
+    private string $ControllerMapper;
 
     /**
      * Inject ControllerMapper Dependency
@@ -19,6 +19,11 @@ class RouteCollection implements RouteMapper
     public function setControllerMapper(string $ControllerMapper): void
     {
         $this->ControllerMapper = $ControllerMapper;
+    }
+
+    public function getControllerMapper(): string
+    {
+        return $this->ControllerMapper;
     }
 
     public function getRoutes(): array
@@ -34,10 +39,7 @@ class RouteCollection implements RouteMapper
     /**
      * Add new route to the collection
      *
-     * @template T of ControllerMapper
-     *
-     * @param  callable(mixed ...): (ResponseState|Stringable|string|scalar|null)  $callable
-     * @return T
+     * @param  callable(mixed ...): (ResponseState|Stringable|scalar|null)  $callable
      */
     public function addRoute(string $method, string $path, object|array $callable): ControllerMapper
     {

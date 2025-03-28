@@ -25,6 +25,11 @@
     },
     "scripts": {        
         "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests",
-        "analyze": "vendor/bin/phpstan analyse src"
+        "analyze": "vendor/bin/phpstan analyse src",
+        "fixstyle": "./vendor/bin/pint",
+        "server": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php -S localhost:8000 demo/index.php"
+        ]
     }
 }

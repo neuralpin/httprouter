@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Neuralpin\HTTPRouter\Interface\ControllerMapper;
 use Neuralpin\HTTPRouter\Route;
 use Neuralpin\HTTPRouter\RouteCollection;

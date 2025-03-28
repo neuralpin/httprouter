@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
 use Neuralpin\HTTPRouter\Interface\RequestState;
 use Neuralpin\HTTPRouter\Route;

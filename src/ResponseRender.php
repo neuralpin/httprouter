@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Neuralpin\HTTPRouter;
 
 use Neuralpin\HTTPRouter\Interface\ResponseState;

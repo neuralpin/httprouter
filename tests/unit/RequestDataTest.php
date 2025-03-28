@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Neuralpin\HTTPRouter\RequestData;
 use PHPUnit\Framework\TestCase;
 

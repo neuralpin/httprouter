@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Neuralpin\HTTPRouter\Demo\DemoController;
 use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;
 use Neuralpin\HTTPRouter\Exception\NotFoundException;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Neuralpin\HTTPRouter;
 
 use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
@@ -53,7 +55,7 @@ class Route implements RouteMapperExtended
 
     public function pathMatches(string $path): bool
     {
-        return preg_match($this->pattern, $path);
+        return (bool) preg_match($this->pattern, $path);
     }
 
     public function methodMatches(string $method): bool

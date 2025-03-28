@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Neuralpin\HTTPRouter\Helper;
 
 use Neuralpin\HTTPRouter\Interface\RequestState;
@@ -66,7 +68,7 @@ class RequestDataHelper
         $RequestState->setBody(json_decode($bodyRequestString, true));
         $RequestState->setQueryParams(self::getQueryParams($queryString));
         $RequestState->setMethod($_SERVER['REQUEST_METHOD'] ?? 'get');
-        $RequestState->setPath(strtok(trim($_SERVER['REQUEST_URI'] ?? '', '/') ?? '/', '?'));
+        $RequestState->setPath((string) strtok(trim($_SERVER['REQUEST_URI'] ?? '', '/') ?? '/', '?'));
 
         return $RequestState;
     }

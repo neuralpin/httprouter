@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Neuralpin\HTTPRouter\Interface\ResponseState;
 use Neuralpin\HTTPRouter\Response;
 use PHPUnit\Framework\TestCase;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Neuralpin\HTTPRouter\ControllerWrapped;
 use Neuralpin\HTTPRouter\Demo\DemoController;
 use Neuralpin\HTTPRouter\Exception\InvalidControllerException;

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Neuralpin\HTTPRouter;
 
+use Neuralpin\HTTPRouter\Interface\ControllerMapper;
 use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
 use Neuralpin\HTTPRouter\Interface\RequestState;
 use Neuralpin\HTTPRouter\Interface\RouteMapperExtended;
 
-class Route implements RouteMapperExtended
+class Route implements ControllerMapper, RouteMapperExtended
 {
     protected string $basePath;
 

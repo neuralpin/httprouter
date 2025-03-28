@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Neuralpin\HTTPRouter\Interface;
 
-interface RouteMapperExtended extends ControllerMapper
+interface RouteMapperExtended
 {
     public function ignoreParamSlash();
 }
